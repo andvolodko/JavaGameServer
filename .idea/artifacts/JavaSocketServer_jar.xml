@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="JavaSocketServer:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/JavaSocketServer_jar</output-path>
+    <root id="archive" name="JavaSocketServer.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/JavaSocketServer/src/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="module-output" name="JavaSocketServer" />
+    </root>
+  </artifact>
+</component>

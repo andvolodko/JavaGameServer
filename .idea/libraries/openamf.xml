@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="openamf">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/JavaSocketServer/libs/openamf" />
+      <root url="file://$PROJECT_DIR$/JavaSocketServer/libs/openamf" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="http://openamf.com/javadocs/index.html" />
+    </JAVADOC>
+    <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/JavaSocketServer/libs/openamf" recursive="false" />
+  </library>
+</component>

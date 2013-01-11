@@ -1,7 +1,9 @@
+package engine;
+
 import com.google.gson.Gson;
+import utils.Log;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -20,17 +22,19 @@ public class GameClient extends Thread{
     private PrintWriter socketOut;
     private Gson gson;
     private ClientData clientData;
+    private Signals signals;
 
     public GameClient(Socket socket, GameServer gameServer) {
         this.socket = socket;
         this.gameServer = gameServer;
         //
         gson = new Gson();
+        signals = Signals.getInstance();
     }
 
     public void run() {
         try {
-        Log.trace("client connection from " + socket.getRemoteSocketAddress());
+        Log.trace("Client connection from " + socket.getRemoteSocketAddress());
             socketIn = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             socketOut = new PrintWriter(socket.getOutputStream(), true);
             socketOut.flush();
@@ -51,24 +55,24 @@ public class GameClient extends Thread{
                     }
                     //
                     else if(clientData.getcmd().compareToIgnoreCase(NetMsgVO.UPDATE_ENTITIES) == 0) {
-                        clientData.setdata(NetMsgVO.RESPONSE_OK);
-                        send(gson.toJson(clientData));
+                        signals.dispatch(SignalsVO.UPDATE_ENTITIES, null);
                     }
                 }
                 clientData = null;
                 line = this.socketIn.readLine();
             }
-
+            Log.trace("Client disconnected from " + socket.getRemoteSocketAddress());
+            gameServer.clientRemove(this);
         }
         catch (Exception e) {
-            Log.trace(e.getMessage());
+            Log.trace("Game client error: " + e.getMessage());
         }
     }
 
     public void send(String data) {
         socketOut.write(data + "\u0000");
         socketOut.flush();
-        Log.trace("Send to client: "+data);
+        Log.trace("Send to client: " + data);
     }
 
     public void remove() {

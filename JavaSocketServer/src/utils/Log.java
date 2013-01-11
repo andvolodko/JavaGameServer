@@ -1,3 +1,5 @@
+package utils;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Andrey

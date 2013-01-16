@@ -1,5 +1,7 @@
 package engine;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 /**
  * Created by IntelliJ IDEA.
  * User: Andrey
@@ -15,9 +17,9 @@ public class NetMsgVO {
 
     //Policy
     public static final String POLICY_REQUEST = "<policy-file-request/>";
-    public static final String POLICY_XML = "<?xml version=\"1.0\"?>"
+    public static final String POLICY_XML = StringEscapeUtils.unescapeJava("<?xml version=\"1.0\"?>"
             + "<cross-domain-policy>"
             + "<allow-access-from domain=\"*\" to-ports=\"*\" />"
-            + "</cross-domain-policy>";
+            + "</cross-domain-policy>");
 
 }

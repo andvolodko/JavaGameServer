@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import utils.Log;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -23,6 +24,7 @@ public class GameClient extends Thread{
     private Gson gson;
     private ClientData clientData;
     private Signals signals;
+    public Boolean connected = true;
 
     public GameClient(Socket socket, GameServer gameServer) {
         this.socket = socket;
@@ -43,20 +45,16 @@ public class GameClient extends Thread{
             while (line != null) {
                 Log.trace("client says '" + line + "'");
                 //
-                if (line.indexOf(NetMsgVO.POLICY_REQUEST) >= 0) {
-                    send(NetMsgVO.POLICY_XML);
-                } else {
-                    clientData = gson.fromJson(line, ClientData.class);
-                    //
-                    if (clientData.getcmd().compareToIgnoreCase(NetMsgVO.LOGIN) == 0) {
-                        //TODO check login data
-                        clientData.setdata(NetMsgVO.RESPONSE_OK);
-                        send(gson.toJson(clientData));
-                    }
-                    //
-                    else if(clientData.getcmd().compareToIgnoreCase(NetMsgVO.UPDATE_ENTITIES) == 0) {
-                        signals.dispatch(SignalsVO.UPDATE_ENTITIES, null);
-                    }
+                clientData = gson.fromJson(line, ClientData.class);
+                //
+                if (clientData.getcmd().compareToIgnoreCase(NetMsgVO.LOGIN) == 0) {
+                    //TODO check login data
+                    clientData.setdata(NetMsgVO.RESPONSE_OK);
+                    send(gson.toJson(clientData));
+                }
+                //
+                else if(clientData.getcmd().compareToIgnoreCase(NetMsgVO.UPDATE_ENTITIES) == 0) {
+                    signals.dispatch(SignalsVO.UPDATE_ENTITIES, null);
                 }
                 clientData = null;
                 line = this.socketIn.readLine();
@@ -75,8 +73,9 @@ public class GameClient extends Thread{
         Log.trace("Send to client: " + data);
     }
 
-    public void remove() {
+    public void remove() throws IOException {
         socketOut.close();
+        socketIn.close();
     }
 
 }

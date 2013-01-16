@@ -5,6 +5,7 @@ import rooms.BaseRoom;
 import rooms.DefenseRoom;
 import utils.Log;
 
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Vector;
@@ -18,7 +19,7 @@ import java.util.Vector;
  */
 public class GameServer extends Thread implements ISignalListener {
 
-    static private int SERVER_PORT = 9999;
+    static public int SERVER_PORT = 9999;
     private ServerSocket socketServer;
     private boolean listening = false;
     private Vector<GameClient> clients = new Vector<GameClient>();
@@ -55,7 +56,8 @@ public class GameServer extends Thread implements ISignalListener {
         }
     }
 
-    public void clientRemove(GameClient gameClient) {
+    public void clientRemove(GameClient gameClient) throws IOException {
+        gameClient.remove();
         clients.remove(gameClient);
     }
 
@@ -65,7 +67,7 @@ public class GameServer extends Thread implements ISignalListener {
         Log.trace("Send to all: "+toSend);
         for (int i = 0; i < clients.size(); i++) {
             GameClient client = clients.get(i);
-            client.send(toSend);
+            if(client.connected) client.send(toSend);
         }
     }
 

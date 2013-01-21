@@ -1,4 +1,4 @@
-package engine;
+package engine.netdata;
 
 /**
  * Created by IntelliJ IDEA.
@@ -9,11 +9,11 @@ package engine;
  */
 public class ClientData {
     private String cmd;
-    private String data;
+    private Object data;
 
     public String getcmd() { return cmd; }
-    public String getdata() { return data; }
+    public Object getdata() { return data; }
 
     public void setcmd(String cmd) { this.cmd = cmd; }
-    public void setdata(String data) { this.data = data; }
+    public void setdata(Object data) { this.data = data; }
 }

@@ -2,14 +2,12 @@ package rooms;
 
 import com.google.gson.Gson;
 import engine.GameServer;
-import engine.NetMsgVO;
-import engine.SignalsVO;
+import engine.vo.NetMsgVO;
+import engine.vo.SignalsVO;
 import objects.BaseObject;
 import objects.Rock;
 import utils.Log;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Timer;
 import java.util.TimerTask;
 

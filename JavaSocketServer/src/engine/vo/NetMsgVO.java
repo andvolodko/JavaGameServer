@@ -1,4 +1,4 @@
-package engine;
+package engine.vo;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 

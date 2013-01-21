@@ -1,5 +1,6 @@
 package engine;
 
+import engine.vo.SignalsVO;
 import org.apache.commons.lang3.StringEscapeUtils;
 import rooms.BaseRoom;
 import rooms.DefenseRoom;
@@ -46,7 +47,6 @@ public class GameServer extends Thread implements ISignalListener {
                 Socket socket = socketServer.accept();
                 GameClient client = new GameClient(socket, this);
                 client.start();
-                clients.add(client);
                 //Thread.sleep(1000);
                 //socketOut.close();
             }
@@ -54,6 +54,10 @@ public class GameServer extends Thread implements ISignalListener {
         catch (Exception e) {
             Log.trace(e.getMessage());
         }
+    }
+
+    public void clientAdd(GameClient gameClient) throws IOException {
+        clients.add(gameClient);
     }
 
     public void clientRemove(GameClient gameClient) throws IOException {
@@ -69,6 +73,13 @@ public class GameServer extends Thread implements ISignalListener {
             GameClient client = clients.get(i);
             if(client.connected) client.send(toSend);
         }
+    }
+
+    public boolean haveClientWithID(double id) {
+        for (int i = 0; i < clients.size(); i++) {
+            if(clients.get(i).ID == id) return true;
+        }
+        return false;
     }
 
     @Override

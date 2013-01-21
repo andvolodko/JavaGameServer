@@ -1,6 +1,12 @@
 package engine;
 
 import com.google.gson.Gson;
+import com.google.gson.internal.StringMap;
+import engine.netdata.ClientData;
+import engine.netdata.ErrorData;
+import engine.vo.ErrorsVO;
+import engine.vo.NetMsgVO;
+import engine.vo.SignalsVO;
 import utils.Log;
 
 import java.io.BufferedReader;
@@ -24,7 +30,8 @@ public class GameClient extends Thread{
     private Gson gson;
     private ClientData clientData;
     private Signals signals;
-    public Boolean connected = true;
+    public Boolean connected = false;
+    public double ID = -1;
 
     public GameClient(Socket socket, GameServer gameServer) {
         this.socket = socket;
@@ -48,9 +55,24 @@ public class GameClient extends Thread{
                 clientData = gson.fromJson(line, ClientData.class);
                 //
                 if (clientData.getcmd().compareToIgnoreCase(NetMsgVO.LOGIN) == 0) {
-                    //TODO check login data
-                    clientData.setdata(NetMsgVO.RESPONSE_OK);
+                    if(clientData.getdata() instanceof StringMap) {
+                        StringMap loginData = (StringMap)clientData.getdata();
+                        ID = (Double)loginData.get("id");
+                    }
+                    //
+                    if(ID != -1 && !gameServer.haveClientWithID(ID)) {
+                        connected = true;
+                        gameServer.clientAdd(this);
+                        clientData.setdata(NetMsgVO.RESPONSE_OK);
+                    } else {
+                        if(ID == -1) clientData.setdata(new ErrorData(ErrorsVO.NO_USER_ID));
+                        else clientData.setdata(new ErrorData(ErrorsVO.HAVE_CLIENT_ID));
+                    }
                     send(gson.toJson(clientData));
+                    if(!connected) {
+                        remove();
+                        return;
+                    }
                 }
                 //
                 else if(clientData.getcmd().compareToIgnoreCase(NetMsgVO.UPDATE_ENTITIES) == 0) {

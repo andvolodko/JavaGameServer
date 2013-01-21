@@ -1,4 +1,4 @@
-package engine;
+package engine.vo;
 
 /**
  * Created by IntelliJ IDEA.

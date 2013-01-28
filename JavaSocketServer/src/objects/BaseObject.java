@@ -13,6 +13,7 @@ public class BaseObject {
     
     protected int uid = Misc.getUID();
     protected String name = "noname";
+    protected String type = "notype";
     protected double x = 0;
     protected double y = 0;
 

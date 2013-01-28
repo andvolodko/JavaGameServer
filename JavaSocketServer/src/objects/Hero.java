@@ -5,14 +5,14 @@ import engine.vo.TypesVO;
 /**
  * Created by IntelliJ IDEA.
  * User: Andrey
- * Date: 11.01.13
- * Time: 22:15
+ * Date: 21.01.13
+ * Time: 2:25
  * To change this template use File | Settings | File Templates.
  */
-public class Rock extends BaseObject {
-    public Rock() {
+public class Hero extends BaseObject {
+    public Hero() {
         super();
-        type = TypesVO.ROCK;
+        type = TypesVO.HERO;
     }
 
     @Override
@@ -21,5 +21,6 @@ public class Rock extends BaseObject {
         //
         name = name +" "+ uid;
     }
+
 
 }

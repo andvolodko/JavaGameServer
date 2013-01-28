@@ -1,10 +1,12 @@
 package rooms;
 
 import com.google.gson.Gson;
+import engine.GameClient;
 import engine.GameServer;
 import engine.vo.NetMsgVO;
 import engine.vo.SignalsVO;
 import objects.BaseObject;
+import objects.Hero;
 import objects.Rock;
 import utils.Log;
 
@@ -70,7 +72,11 @@ public class DefenseRoom extends BaseRoom {
 
     @Override
     public void signalListener(String msg, Object data) {
-        if(msg == SignalsVO.UPDATE_ENTITIES) {
+        if(msg == SignalsVO.CLIENT_CONNECTED) {
+            GameClient gameClient = (GameClient)data;
+            Hero hero = new Hero();
+            objects.add(hero);
+        } else if(msg == SignalsVO.UPDATE_ENTITIES) {
             updateObject();
         }
 

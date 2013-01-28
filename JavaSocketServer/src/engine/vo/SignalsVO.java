@@ -8,7 +8,10 @@ package engine.vo;
  * To change this template use File | Settings | File Templates.
  */
 public class SignalsVO {
-    static public final String UPDATE_ENTITIES = "UPDATE_ENTITIES";
+    //
+    public static final String CLIENT_CONNECTED = "CLIENT_CONNECTED";
+    public static final String UPDATE_ENTITIES = "UPDATE_ENTITIES";
+    //
     public static final String NETWORK_SEND = "NETWORK_SEND";
     public static final String NETWORK_SET_CMD = "NETWORK_SET_CMD";
 }

@@ -61,14 +61,13 @@ public class GameServer extends Thread implements ISignalListener {
     }
 
     public void clientRemove(GameClient gameClient) throws IOException {
-        gameClient.remove();
         clients.remove(gameClient);
     }
 
     public void sendMsg(String cmd, String data) {
         String toSend = "{\"cmd\":\""+cmd+"\",\"data\":"+data+"}";
         toSend = StringEscapeUtils.unescapeJava(toSend);
-        Log.trace("Send to all: "+toSend);
+        Log.trace("Send to all ("+clients.size()+"): "+toSend);
         for (int i = 0; i < clients.size(); i++) {
             GameClient client = clients.get(i);
             if(client.connected) client.send(toSend);

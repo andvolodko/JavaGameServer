@@ -12,6 +12,10 @@ import org.apache.commons.lang3.StringEscapeUtils;
 public class NetMsgVO {
     public static final String LOGIN = "login";
     public static final String UPDATE_ENTITIES = "ue";
+    public static final String ADD_ENTITY = "ae";
+    public static final String MOVE_ENTITY = "me";
+    public static final String ATTACK_ENTITY = "ate";
+    public static final String REMOVE_ENTITY = "re";
 
     public static final String RESPONSE_OK = "ok";
 
@@ -21,5 +25,7 @@ public class NetMsgVO {
             + "<cross-domain-policy>"
             + "<allow-access-from domain=\"*\" to-ports=\"*\" />"
             + "</cross-domain-policy>");
+
+
 
 }

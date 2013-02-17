@@ -10,16 +10,19 @@ import engine.vo.TypesVO;
  * To change this template use File | Settings | File Templates.
  */
 public class Hero extends BaseObject {
-    public Hero() {
+
+    public Hero(double ID, String nameLoc) {
         super();
         type = TypesVO.HERO;
+        uid = (int)ID;
+        name = nameLoc;
     }
 
     @Override
     protected void init() {
         super.init();
         //
-        name = name +" "+ uid;
+        //name = name +" "+ uid;
     }
 
 

@@ -25,6 +25,9 @@ import java.net.Socket;
  * Copyright
  */
 public class GameClient extends Thread{
+
+    static private int test_uid_add = 0;
+
     private Socket socket;
     private GameServer gameServer;
     private BufferedReader socketIn;
@@ -34,6 +37,7 @@ public class GameClient extends Thread{
     private Signals signals;
     public Boolean connected = false;
     public double ID = -1;
+    public String name = "Client nn";
     public String TOKEN = "";
     private VkontakteAPI vkapi;
 
@@ -65,12 +69,14 @@ public class GameClient extends Thread{
                         TOKEN = (String)loginData.get("token");
                         vkapi = new VkontakteAPI(ID, TOKEN);
                         vkapi.getUserInfo();
+                        ID += test_uid_add; test_uid_add++; //For test with 1 account
                     }
                     //
                     if(ID != -1 && !gameServer.haveClientWithID(ID)) {
                         connected = true;
                         gameServer.clientAdd(this);
                         clientData.setdata(new LoginData(vkapi.getFirst(), vkapi.getLast()));
+                        name = vkapi.getFirst()+" "+vkapi.getLast();
                     } else {
                         if(ID == -1) clientData.setdata(new ErrorData(ErrorsVO.NO_USER_ID));
                         else clientData.setdata(new ErrorData(ErrorsVO.HAVE_CLIENT_ID));
@@ -87,11 +93,22 @@ public class GameClient extends Thread{
                 else if(clientData.getcmd().compareToIgnoreCase(NetMsgVO.UPDATE_ENTITIES) == 0) {
                     signals.dispatch(SignalsVO.UPDATE_ENTITIES, null);
                 }
+                //Move entity
+                else if(clientData.getcmd().compareToIgnoreCase(NetMsgVO.MOVE_ENTITY) == 0) {
+                    signals.dispatch(SignalsVO.MOVE_ENTITY, clientData.getdata());
+                }
+                //Attack entity
+                else if(clientData.getcmd().compareToIgnoreCase(NetMsgVO.ATTACK_ENTITY) == 0) {
+                    signals.dispatch(SignalsVO.ATTACK_ENTITY, clientData.getdata());
+                }
+
                 clientData = null;
                 line = this.socketIn.readLine();
             }
             Log.trace("Client disconnected from " + socket.getRemoteSocketAddress());
             gameServer.clientRemove(this);
+            signals.dispatch(SignalsVO.CLIENT_DISCONNECTED, this);
+            remove();
         }
         catch (Exception e) {
             Log.trace("Game client error: " + e.getMessage());
